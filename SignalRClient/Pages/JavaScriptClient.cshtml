@@ -1,9 +1,8 @@
 ﻿@page
-@model IndexModel
+@model SignalRClient.Pages.JavaScriptClientModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "SignalR Javascript Client page";
 }
-
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -12,10 +11,12 @@
             <p>SignalR Progress test</p>
         </div>
         <div>
-            <a asp-page="JavaScriptClient">Java Script</a>
+            <input type="button" id="sendButton" value="Start Process" />
         </div>
         <div>
-            <a asp-page="NetCoreClientPage">ASP.NET Core</a>
+            Progress: <span id="progressSpan">0</span>%
         </div>
     </div>
 </div>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/progress.js"></script>

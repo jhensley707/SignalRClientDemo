@@ -1,0 +1,50 @@
+﻿@page
+@model SignalRClient.Pages.NetCoreClientPageModel
+@{
+    ViewData["Title"] = "ASP.NET Core client page";
+}
+<h2>Core Client Page</h2>
+<p>This page connects to the server at the specified URL and establishes a SignalR hub connection.
+    The connection at <b>/hubs/progress</b> establishes an event listener. Once the <b>/api/values</b>
+    method is invoked on the server, this page will listen and display the progress.</p>
+<div class="display-block">URL: <input type="text" id="serverHost" value="localhost:44390" />
+    Use SSL <input type="checkbox" id="useSsl" checked /></div>
+<div class="display-block">Completion: <span id="messageDisplay">0</span>%</div>
+<p>There are 2 drawbacks to this page logic. </p>
+<ol>
+    <li>
+        The invocation of the API to trigger the progress status is done through a separate browser
+        window to the <b>/api/values</b> path on the server. Integrating the invocation of the
+        long-running activity on the server with this client page is the first goal.
+    </li>
+    <li>
+        The server uses <i>progressHub.Clients.All</i> which broadcasts to all connected clients.
+        Open multiple browser tabs to the client URL and watch all of them be updated with the
+        same progress status. Returning the progress message to only the originating caller
+        is the second goal.
+    </li>
+</ol>
+@section Scripts {
+    <script src="/lib/signalr/signalr.js"></script>
+    <script type="text/javascript">
+        var serverHost = document.getElementById("serverHost");
+        var useSsl = document.getElementById("useSsl");
+        var messagesList = document.getElementById("messageDisplay");
+
+        function appendMessage(content) {
+            messagesList.textContent = content;
+        }
+        var url = useSsl.value ? "https://" : "http://";
+        url += serverHost.value + "/hubs/progress";
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl(url)
+            .build();
+
+        connection.on("ShowProgress", function (message) {
+            appendMessage(message)
+        });
+
+        connection.start();
+
+    </script>
+}
