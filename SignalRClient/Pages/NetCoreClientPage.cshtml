@@ -1,14 +1,20 @@
 ﻿@page
 @model SignalRClient.Pages.NetCoreClientPageModel
 @{
-    ViewData["Title"] = "ASP.NET Core client page";
+    ViewData["Title"] = "ASP.NET Core Razor Client Page";
 }
-<h2>Core Client Page</h2>
-<p>This page connects to the server at the specified URL and establishes a SignalR hub connection.
+<h1>Core Client Page</h1>
+<p>This page demonstrates SignalR connectivity from an ASP.NET Core Razor Page.</p>
+<h2>Razor Page Listener JavaScript Client</h2>
+<p>
+    This page connects to the server at the specified URL and establishes a SignalR hub connection.
     The connection at <b>/hubs/progress</b> establishes an event listener. Once the <b>/api/values</b>
-    method is invoked on the server, this page will listen and display the progress.</p>
-<div class="display-block">URL: <input type="text" id="serverHost" value="localhost:44390" />
-    Use SSL <input type="checkbox" id="useSsl" checked /></div>
+    method is invoked on the server, this page will listen and display the progress.
+</p>
+<div class="display-block margin-top-bottom-10">
+    URL: <input type="text" id="serverHost" value="localhost:44390" />
+    Use SSL <input type="checkbox" id="useSsl" checked />
+</div>
 <div class="display-block">Completion: <span id="messageDisplay">0</span>%</div>
 <p>There are 2 drawbacks to this page logic. </p>
 <ol>
@@ -24,6 +30,7 @@
         is the second goal.
     </li>
 </ol>
+
 @section Scripts {
     <script src="/lib/signalr/signalr.js"></script>
     <script type="text/javascript">
@@ -45,6 +52,5 @@
         });
 
         connection.start();
-
     </script>
 }

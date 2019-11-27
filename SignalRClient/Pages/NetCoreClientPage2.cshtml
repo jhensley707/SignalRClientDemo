@@ -1,0 +1,79 @@
+﻿@page
+@model SignalRClient.Pages.NetCoreClientPage2Model
+@{
+    ViewData["Title"] = "ASP.NET Core Razor Client Page 2";
+}
+<h1>Core Client Page</h1>
+<p>This page demonstrates SignalR connectivity from an ASP.NET Core Razor Page.</p>
+<h2>Razor Page Interactive JavaScript Client</h2>
+<p>
+    This page connects to the server at the specified URL and establishes a SignalR hub connection.
+    Clicking on the Submit button invokes a request on the server at <b>/hubs/longrunning</b>.
+    This establishes an event listener which will display the progress and eventually the result.
+</p>
+<div class="margin-top-bottom-10">
+    <div class="display-block">
+        URL: <input type="text" id="serverHost" value="localhost:44390" />
+        Use SSL <input type="checkbox" id="useSsl" checked />
+    </div>
+    <div class="display-block margin-top-bottom-10">Task Name: <input type="text" id="requestName" /></div>
+    <div class="display-block margin-top-bottom-10">
+        <button onclick="sendRequest()">Submit</button>
+    </div>
+    <div class="display-block margin-top-bottom-10">Completion: <span id="progressDisplay">0</span>%</div>
+    <div class="display-block margin-top-bottom-10">
+        Task Id: <span id="resultTaskId"></span>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="/lib/signalr/signalr.js"></script>
+    <script type="text/javascript">
+        var serverHost = document.getElementById("serverHost");
+        var useSsl = document.getElementById("useSsl");
+        var requestName = document.getElementById("requestName");
+        var progressDisplay = document.getElementById("progressDisplay");
+        var resultTaskId = document.getElementById("resultTaskId");
+
+        function appendMessage(content) {
+            progressDisplay.textContent = content;
+        }
+
+        function setResult(result) {
+            resultTaskId.textContent = result.taskId;
+        }
+
+
+        var url = useSsl.value ? "https://" : "http://";
+        url += serverHost.value + "/hubs/longrunning";
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl(url)
+            .build();
+
+        connection.on("ShowProgress", function (message) {
+            appendMessage(message)
+        });
+
+        connection.on("ReturnTaskResult", function (result) {
+            setResult(result);
+            connection.stop();
+        });
+
+
+        async function sendRequest() {
+            resultTaskId.textContent = "";
+            let request = {};
+            request.Name = requestName.value;
+            console.log("submitting request with name " + request.Name);
+            try {
+                await connection.start();
+                console.log("Connection established");
+            }
+            catch (err) {
+                console.err(err);
+            }
+
+            await connection.invoke("SubmitTaskRequest", request);
+        }
+    </script>
+}

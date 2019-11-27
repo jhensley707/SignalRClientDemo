@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
 
 namespace SignalRClient.Pages
 {
-    public class NetCoreClientPageModel : PageModel
+    public class NetCoreClientPage2Model : PageModel
     {
         public void OnGet()
         {

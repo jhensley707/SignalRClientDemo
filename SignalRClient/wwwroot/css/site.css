@@ -58,3 +58,8 @@ body {
 .display-block {
     display: block;
 }
+
+.margin-top-bottom-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
