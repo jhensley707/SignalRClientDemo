@@ -16,20 +16,22 @@
     Use SSL <input type="checkbox" id="useSsl" checked />
 </div>
 <div class="display-block">Completion: <span id="messageDisplay">0</span>%</div>
-<p>There are 2 drawbacks to this page logic. </p>
-<ol>
-    <li>
-        The invocation of the API to trigger the progress status is done through a separate browser
-        window to the <b>/api/values</b> path on the server. Integrating the invocation of the
-        long-running activity on the server with this client page is the first goal.
-    </li>
-    <li>
-        The server uses <i>progressHub.Clients.All</i> which broadcasts to all connected clients.
-        Open multiple browser tabs to the client URL and watch all of them be updated with the
-        same progress status. Returning the progress message to only the originating caller
-        is the second goal.
-    </li>
-</ol>
+<div class="margin-top-bottom-10">
+    <p>There are 2 drawbacks to this page logic. </p>
+    <ol>
+        <li>
+            The invocation of the API to trigger the progress status is done through a separate browser
+            window to the <b>/api/values</b> path on the server. Integrating the invocation of the
+            long-running activity on the server with this client page is the first goal.
+        </li>
+        <li>
+            The server uses <i>progressHub.Clients.All</i> which broadcasts to all connected clients.
+            Open multiple browser tabs to the client URL and watch all of them be updated with the
+            same progress status. Returning the progress message to only the originating caller
+            is the second goal.
+        </li>
+    </ol>
+</div>
 
 @section Scripts {
     <script src="/lib/signalr/signalr.js"></script>

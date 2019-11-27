@@ -9,16 +9,24 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <div>
         <div>
-            <p>SignalR Progress test</p>
+            <h2>SignalR Progress test</h2>
+            <p>These client pages will demonstrate SignalR functionality to provide progress status
+            for long running tasks on a web service</p>
+            <p>Start the SignalR Server Demo in a separate Visual Studio instance. Then start this
+            SignalR Client Demo which should launch in a window of your default browser.
+            Open a second browser window to the same URL and display them side-by-side.</p>
         </div>
-        <div>
+        @*<div>
             <a asp-page="JavaScriptClient">Java Script</a>
-        </div>
+        </div>*@
         <div>
             <a asp-page="NetCoreClientPage">ASP.NET Core Razor Page Javascript Listener</a>
         </div>
         <div>
             <a asp-page="NetCoreClientPage2">ASP.NET Core Razor Page Javascript Interactive</a>
+        </div>
+        <div>
+            <a asp-page="BackgroundTaskPage">ASP.NET Core Razor Page Background Task</a>
         </div>
     </div>
 </div>

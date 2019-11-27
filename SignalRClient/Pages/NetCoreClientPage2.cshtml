@@ -25,55 +25,62 @@
         Task Id: <span id="resultTaskId"></span>
     </div>
 </div>
+<div class="margin-top-bottom-10">
+    <p>There is 1 drawback to this server logic.</p>
+    <p>To maintain the server-client hub instance, the server code runs synchronously.
+    This means that the original client connection to the server is probably still
+    connected and subject to HTTP timeout. However, this is necessary to allow the
+    server to communicate with the original client caller and not broadcast to all
+    connected instances.</p>
+</div>
+    @section Scripts {
+        <script src="/lib/signalr/signalr.js"></script>
+        <script type="text/javascript">
+            var serverHost = document.getElementById("serverHost");
+            var useSsl = document.getElementById("useSsl");
+            var requestName = document.getElementById("requestName");
+            var progressDisplay = document.getElementById("progressDisplay");
+            var resultTaskId = document.getElementById("resultTaskId");
 
-@section Scripts {
-    <script src="/lib/signalr/signalr.js"></script>
-    <script type="text/javascript">
-        var serverHost = document.getElementById("serverHost");
-        var useSsl = document.getElementById("useSsl");
-        var requestName = document.getElementById("requestName");
-        var progressDisplay = document.getElementById("progressDisplay");
-        var resultTaskId = document.getElementById("resultTaskId");
-
-        function appendMessage(content) {
-            progressDisplay.textContent = content;
-        }
-
-        function setResult(result) {
-            resultTaskId.textContent = result.taskId;
-        }
-
-
-        var url = useSsl.value ? "https://" : "http://";
-        url += serverHost.value + "/hubs/longrunning";
-        var connection = new signalR.HubConnectionBuilder()
-            .withUrl(url)
-            .build();
-
-        connection.on("ShowProgress", function (message) {
-            appendMessage(message)
-        });
-
-        connection.on("ReturnTaskResult", function (result) {
-            setResult(result);
-            connection.stop();
-        });
-
-
-        async function sendRequest() {
-            resultTaskId.textContent = "";
-            let request = {};
-            request.Name = requestName.value;
-            console.log("submitting request with name " + request.Name);
-            try {
-                await connection.start();
-                console.log("Connection established");
-            }
-            catch (err) {
-                console.err(err);
+            function appendMessage(content) {
+                progressDisplay.textContent = content;
             }
 
-            await connection.invoke("SubmitTaskRequest", request);
-        }
-    </script>
-}
+            function setResult(result) {
+                resultTaskId.textContent = result.taskId;
+            }
+
+
+            var url = useSsl.value ? "https://" : "http://";
+            url += serverHost.value + "/hubs/longrunning";
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl(url)
+                .build();
+
+            connection.on("ShowProgress", function (message) {
+                appendMessage(message)
+            });
+
+            connection.on("ReturnTaskResult", function (result) {
+                setResult(result);
+                connection.stop();
+            });
+
+
+            async function sendRequest() {
+                resultTaskId.textContent = "";
+                let request = {};
+                request.Name = requestName.value;
+                console.log("submitting request with name " + request.Name);
+                try {
+                    await connection.start();
+                    console.log("Connection established");
+                }
+                catch (err) {
+                    console.err(err);
+                }
+
+                await connection.invoke("SubmitTaskRequest", request);
+            }
+        </script>
+    }
